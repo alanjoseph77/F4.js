@@ -1,0 +1,118 @@
+{
+  "name": "4js",
+  "version": "1.0.0",
+  "description": "4.js - Enhanced 3D Graphics Library. Three.js evolved: easier for beginners, more powerful for experts.",
+  "type": "module",
+  "main": "./build/four.cjs",
+  "module": "./build/four.module.js",
+  "exports": {
+    ".": {
+      "import": "./build/four.module.js",
+      "require": "./build/four.cjs"
+    },
+    "./examples/fonts/*": "./examples/fonts/*",
+    "./examples/jsm/*": "./examples/jsm/*",
+    "./addons": "./examples/jsm/Addons.js",
+    "./addons/*": "./examples/jsm/*",
+    "./src/*": "./src/*",
+    "./webgpu": "./build/four.webgpu.js",
+    "./tsl": "./build/four.tsl.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4js-team/4js.git"
+  },
+  "sideEffects": [
+    "./src/nodes/**/*"
+  ],
+  "files": [
+    "build",
+    "examples/jsm",
+    "examples/fonts",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "src"
+  ],
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "test"
+  },
+  "browserslist": [
+    "> 1%, not dead, not ie 11, not op_mini all"
+  ],
+  "scripts": {
+    "start": "npm run dev",
+    "build": "rollup -c utils/build/rollup.config.js",
+    "build-module": "rollup -c utils/build/rollup.config.js --configOnlyModule",
+    "build-examples": "rollup -c utils/build/rollup.examples.config.js --silent",
+    "dev": "concurrently --names \"ROLLUP,HTTP\" -c \"bgBlue.bold,bgGreen.bold\" \"rollup -c utils/build/rollup.config.js -w -m inline\" \"servez -p 8080\"",
+    "demo": "servez -p 8080",
+    "lint": "eslint src --ext js",
+    "lint-fix": "npm run lint -- --fix",
+    "lint-docs": "eslint docs --ext html",
+    "test": "npm run lint && npm run test-unit",
+    "test-unit": "npm run unit-pass && npm run unit-pass-esm",
+    "unit-pass": "node test/unit/four.source.unit.js",
+    "unit-pass-esm": "node test/unit/four.module.unit.js",
+    "test-e2e": "node test/e2e/puppeteer.js",
+    "test-e2e-cov": "node test/e2e/check-coverage.js",
+    "test-treeshake": "rollup -c test/rollup.treeshake.config.js",
+    "make-screenshot": "node test/e2e/puppeteer.js --make"
+  },
+  "keywords": [
+    "4js",
+    "fourjs",
+    "javascript",
+    "3d",
+    "graphics",
+    "webgl",
+    "webgl2",
+    "three.js",
+    "enhanced",
+    "advanced",
+    "easy",
+    "virtual-reality",
+    "augmented-reality",
+    "webaudio",
+    "webxr",
+    "canvas",
+    "svg",
+    "html5",
+    "modern",
+    "performance"
+  ],
+  "author": "4.js Team",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/4js-team/4js/issues"
+  },
+  "homepage": "https://4js.dev/",
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "eslint-config-mdcs": "^5.0.0",
+    "puppeteer": "^22.6.5",
+    "rollup": "^4.13.0",
+    "servez": "^2.2.4"
+  },
+  "overrides": {
+    "jpeg-js": "^0.4.4"
+  },
+  "jspm": {
+    "files": [
+      "package.json",
+      "LICENSE",
+      "README.md",
+      "build/four.js",
+      "build/four.min.js",
+      "build/four.module.js"
+    ],
+    "directories": {
+      "lib": "build"
+    }
+  }
+}

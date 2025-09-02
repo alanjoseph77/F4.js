@@ -1,0 +1,23 @@
+{
+  "source": {
+    "include": ["./src/"],
+    "includePattern": "\\.(js)$",
+    "exclude": ["node_modules/"]
+  },
+  "opts": {
+    "destination": "./docs/",
+    "recurse": true
+  },
+  "plugins": ["plugins/markdown"],
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+  },
+  "metadata": {
+    "title": "4.js API Documentation",
+    "description": "Complete API reference for the 4.js library",
+    "version": "1.0.0",
+    "author": "Alan and Alisha",
+    "copyright": "Copyright © 2025 Alan and Alisha - 4.js Library"
+  }
+}

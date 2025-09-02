@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.js Quick Start</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #1a1a1a;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, #4A90E2, #357abd);
+            margin-bottom: 40px;
+            border-radius: 15px;
+        }
+        
+        .hero h1 {
+            font-size: 4em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero p {
+            font-size: 1.5em;
+            margin: 20px 0;
+            opacity: 0.9;
+        }
+        
+        .quick-demo {
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        #quickCanvas {
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        
+        .feature {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .feature h3 {
+            color: #4A90E2;
+            margin-top: 0;
+        }
+        
+        .code-section {
+            background: #1e1e1e;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .code-section h3 {
+            color: #4A90E2;
+            margin-top: 0;
+        }
+        
+        pre {
+            background: #0d1117;
+            color: #c9d1d9;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border-left: 4px solid #4A90E2;
+        }
+        
+        .btn-group {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #357abd;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>4.js</h1>
+            <p>Enhanced Three.js - Easier to Use, More Advanced</p>
+            <p>Same familiar API, but simpler for beginners and more powerful for experts</p>
+        </div>
+
+        <div class="quick-demo">
+            <h2>Live Demo</h2>
+            <canvas id="quickCanvas" width="800" height="400"></canvas>
+            <p>Interactive 3D scene with real-time rendering</p>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <h3>🚀 Performance</h3>
+                <p>Optimized WebGL 2.0 rendering with advanced batching and instancing</p>
+            </div>
+            <div class="feature">
+                <h3>🎨 Modern Materials</h3>
+                <p>PBR materials, advanced shaders, and real-time lighting</p>
+            </div>
+            <div class="feature">
+                <h3>🔧 Easy to Use</h3>
+                <p>Simple API with powerful features for both beginners and experts</p>
+            </div>
+            <div class="feature">
+                <h3>📱 Cross-Platform</h3>
+                <p>Works seamlessly across desktop, mobile, and VR/AR devices</p>
+            </div>
+        </div>
+
+        <div class="code-section">
+            <h3>Getting Started in 3 Steps</h3>
+            
+            <h4>1. Include 4.js</h4>
+            <pre><code>&lt;script type="module"&gt;
+import * as FOUR from './build/four.module.js';
+&lt;/script&gt;</code></pre>
+
+            <h4>2. Create Your Scene</h4>
+            <pre><code>// Set up the basic components
+const scene = new FOUR.Scene();
+const camera = new FOUR.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new FOUR.WebGLRenderer({ antialias: true });
+
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);</code></pre>
+
+            <h4>3. Add Objects and Render</h4>
+            <pre><code>// Create a cube
+const geometry = new FOUR.BoxGeometry();
+const material = new FOUR.MeshPhongMaterial({ color: 0x4A90E2 });
+const cube = new FOUR.Mesh(geometry, material);
+scene.add(cube);
+
+// Add lighting
+const light = new FOUR.DirectionalLight(0xffffff, 1);
+light.position.set(5, 5, 5);
+scene.add(light);
+
+// Position camera and render
+camera.position.z = 5;
+renderer.render(scene, camera);</code></pre>
+        </div>
+
+        <div class="btn-group">
+            <a href="demo-4js.html" class="btn">Full Interactive Demo</a>
+            <a href="getting-started.html" class="btn">More Examples</a>
+            <a href="docs/" class="btn">Documentation</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as FOUR from './build/four.module.js';
+
+        // Quick demo scene
+        const canvas = document.getElementById('quickCanvas');
+        const scene = new FOUR.Scene();
+        const camera = new FOUR.PerspectiveCamera(75, canvas.width / canvas.height, 0.1, 1000);
+        const renderer = new FOUR.WebGLRenderer({ canvas, antialias: true });
+        
+        renderer.setSize(canvas.width, canvas.height);
+        renderer.setClearColor(0x1a1a1a);
+
+        // Create multiple objects
+        const objects = [];
+        
+        // Add cubes
+        for (let i = 0; i < 5; i++) {
+            const geometry = new FOUR.BoxGeometry(0.8, 0.8, 0.8);
+            const material = new FOUR.MeshPhongMaterial({
+                color: new FOUR.Color().setHSL(i * 0.2, 0.7, 0.6)
+            });
+            const cube = new FOUR.Mesh(geometry, material);
+            cube.position.x = (i - 2) * 2;
+            scene.add(cube);
+            objects.push(cube);
+        }
+
+        // Add lighting
+        const ambientLight = new FOUR.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new FOUR.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        camera.position.set(0, 2, 8);
+        camera.lookAt(0, 0, 0);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = Date.now() * 0.001;
+            
+            objects.forEach((obj, index) => {
+                obj.rotation.x = time + index;
+                obj.rotation.y = time * 0.5 + index;
+                obj.position.y = Math.sin(time + index) * 0.5;
+            });
+
+            renderer.render(scene, camera);
+        }
+        
+        animate();
+    </script>
+</body>
+</html>
+
+
+

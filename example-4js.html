@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.js Example - By Alan and Alisha</title>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; background: #000; }
+        canvas { display: block; }
+        .info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-family: Arial, sans-serif;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h2>4.js - Next-Generation 3D Engine</h2>
+        <p>Revolutionary JavaScript 3D graphics library</p>
+        <p>Created by Alan and Alisha</p>
+        <p>All conditions and rights belong to Alan and Alisha</p>
+    </div>
+    
+    <script type="module">
+        import * as FOUR from './build/four.module.js';
+
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        // Initialize scene, camera, and renderer
+        const scene = new FOUR.Scene();
+        const camera = new FOUR.PerspectiveCamera(75, width / height, 0.1, 1000);
+        const renderer = new FOUR.WebGLRenderer({ antialias: true });
+
+        renderer.setSize(width, height);
+        renderer.setClearColor(0x222222);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a rotating cube
+        const geometry = new FOUR.BoxGeometry(1, 1, 1);
+        const material = new FOUR.MeshBasicMaterial({ 
+            color: 0x00ff00,
+            wireframe: true 
+        });
+        const cube = new FOUR.Mesh(geometry, material);
+        scene.add(cube);
+
+        // Position camera
+        camera.position.z = 3;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate the cube
+            cube.rotation.x += 0.01;
+            cube.rotation.y += 0.01;
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        });
+
+        // Start animation
+        animate();
+    </script>
+</body>
+</html>
+
+
+

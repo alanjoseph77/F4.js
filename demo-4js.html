@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.js - Advanced 3D Graphics Library Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+        
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            max-width: 300px;
+        }
+        
+        #info h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            color: #4A90E2;
+        }
+        
+        #info p {
+            margin: 5px 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            z-index: 100;
+        }
+        
+        .control-btn {
+            background: rgba(74, 144, 226, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(74, 144, 226, 1);
+            transform: translateY(-2px);
+        }
+        
+        #stats {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="info">
+            <h1>4.js Demo</h1>
+            <p><strong>Advanced 3D Graphics Library</strong></p>
+            <p>• Enhanced performance and modern features</p>
+            <p>• WebGL 2.0 optimized rendering</p>
+            <p>• Advanced lighting and materials</p>
+            <p>• Real-time shadows and reflections</p>
+            <p>• Interactive controls and animations</p>
+        </div>
+        
+        <div id="stats">
+            <div>FPS: <span id="fps">60</span></div>
+            <div>Objects: <span id="objects">0</span></div>
+            <div>Triangles: <span id="triangles">0</span></div>
+        </div>
+        
+        <div id="controls">
+            <button class="control-btn" onclick="addCube()">Add Cube</button>
+            <button class="control-btn" onclick="addSphere()">Add Sphere</button>
+            <button class="control-btn" onclick="toggleAnimation()">Toggle Animation</button>
+            <button class="control-btn" onclick="changeColors()">Random Colors</button>
+            <button class="control-btn" onclick="clearScene()">Clear Scene</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as FOUR from 'https://cdn.jsdelivr.net/gh/alanjoseph77/F4.js@main/build/four.module.js';
+        
+        // Debug: Check FOUR namespace
+        console.log('FOUR object:', FOUR);
+        console.log('WebGLRenderer:', FOUR.WebGLRenderer);
+        window.FOUR = FOUR;
+
+        // Scene setup
+        const scene = new FOUR.Scene();
+        const camera = new FOUR.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new FOUR.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = FOUR.PCFSoftShadowMap;
+        document.getElementById('container').appendChild(renderer.domElement);
+
+        // Lighting setup
+        const ambientLight = new FOUR.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new FOUR.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 5, 5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+
+        const pointLight = new FOUR.PointLight(0x4A90E2, 1, 100);
+        pointLight.position.set(0, 10, 0);
+        scene.add(pointLight);
+
+        // Camera position
+        camera.position.set(5, 5, 5);
+        camera.lookAt(0, 0, 0);
+
+        // Ground plane
+        const groundGeometry = new FOUR.PlaneGeometry(20, 20);
+        const groundMaterial = new FOUR.MeshLambertMaterial({ 
+            color: 0x808080,
+            transparent: true,
+            opacity: 0.8
+        });
+        const ground = new FOUR.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Global variables
+        let objects = [];
+        let animationEnabled = true;
+        let frameCount = 0;
+        let lastTime = performance.now();
+
+        // Demo functions
+        window.addCube = function() {
+            const geometry = new FOUR.BoxGeometry(
+                Math.random() * 2 + 0.5,
+                Math.random() * 2 + 0.5,
+                Math.random() * 2 + 0.5
+            );
+            const material = new FOUR.MeshPhongMaterial({
+                color: new FOUR.Color().setHSL(Math.random(), 0.7, 0.6),
+                shininess: 100
+            });
+            const cube = new FOUR.Mesh(geometry, material);
+            
+            cube.position.set(
+                (Math.random() - 0.5) * 10,
+                Math.random() * 5 + 1,
+                (Math.random() - 0.5) * 10
+            );
+            cube.rotation.set(
+                Math.random() * Math.PI,
+                Math.random() * Math.PI,
+                Math.random() * Math.PI
+            );
+            cube.castShadow = true;
+            cube.receiveShadow = true;
+            
+            scene.add(cube);
+            objects.push(cube);
+            updateStats();
+        };
+
+        window.addSphere = function() {
+            const geometry = new FOUR.SphereGeometry(Math.random() * 1.5 + 0.5, 32, 32);
+            const material = new FOUR.MeshPhongMaterial({
+                color: new FOUR.Color().setHSL(Math.random(), 0.8, 0.5),
+                shininess: 100,
+                transparent: true,
+                opacity: 0.9
+            });
+            const sphere = new FOUR.Mesh(geometry, material);
+            
+            sphere.position.set(
+                (Math.random() - 0.5) * 10,
+                Math.random() * 5 + 1,
+                (Math.random() - 0.5) * 10
+            );
+            sphere.castShadow = true;
+            sphere.receiveShadow = true;
+            
+            scene.add(sphere);
+            objects.push(sphere);
+            updateStats();
+        };
+
+        window.toggleAnimation = function() {
+            animationEnabled = !animationEnabled;
+        };
+
+        window.changeColors = function() {
+            objects.forEach(obj => {
+                if (obj.material) {
+                    obj.material.color.setHSL(Math.random(), 0.7, 0.6);
+                }
+            });
+        };
+
+        window.clearScene = function() {
+            objects.forEach(obj => {
+                scene.remove(obj);
+                obj.geometry.dispose();
+                obj.material.dispose();
+            });
+            objects = [];
+            updateStats();
+        };
+
+        function updateStats() {
+            document.getElementById('objects').textContent = objects.length;
+            const triangles = objects.reduce((total, obj) => {
+                if (obj.geometry && obj.geometry.index) {
+                    return total + obj.geometry.index.count / 3;
+                } else if (obj.geometry && obj.geometry.attributes.position) {
+                    return total + obj.geometry.attributes.position.count / 3;
+                }
+                return total;
+            }, 0);
+            document.getElementById('triangles').textContent = Math.floor(triangles);
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const currentTime = performance.now();
+            frameCount++;
+            
+            if (currentTime >= lastTime + 1000) {
+                const fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+                document.getElementById('fps').textContent = fps;
+                frameCount = 0;
+                lastTime = currentTime;
+            }
+
+            if (animationEnabled) {
+                // Rotate objects
+                objects.forEach((obj, index) => {
+                    obj.rotation.x += 0.01 * (index % 2 === 0 ? 1 : -1);
+                    obj.rotation.y += 0.02 * (index % 3 === 0 ? 1 : -1);
+                    
+                    // Floating animation
+                    obj.position.y += Math.sin(currentTime * 0.001 + index) * 0.01;
+                });
+
+                // Rotate camera around scene
+                const time = currentTime * 0.0005;
+                camera.position.x = Math.cos(time) * 10;
+                camera.position.z = Math.sin(time) * 10;
+                camera.lookAt(0, 2, 0);
+
+                // Animate point light
+                pointLight.position.x = Math.sin(time * 2) * 5;
+                pointLight.position.z = Math.cos(time * 2) * 5;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize with some objects
+        addCube();
+        addSphere();
+        addCube();
+
+        // Start animation
+        animate();
+
+        // Welcome message
+        console.log('%c4.js Demo Loaded Successfully!', 'color: #4A90E2; font-size: 16px; font-weight: bold;');
+        console.log('Try the interactive controls at the bottom of the screen.');
+    </script>

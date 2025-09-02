@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Getting Started with 4.js</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #4A90E2;
+            font-size: 3em;
+            margin: 0;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .demo-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .demo-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .demo-card h3 {
+            color: #4A90E2;
+            margin-top: 0;
+        }
+        
+        .demo-canvas {
+            width: 100%;
+            height: 200px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .code-example {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+        }
+        
+        .btn {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #357abd;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>4.js</h1>
+        <p>Advanced 3D Graphics Library</p>
+        <p>Easy to use, powerful, and modern</p>
+    </div>
+
+    <div class="demo-grid">
+        <!-- Basic Scene Demo -->
+        <div class="demo-card">
+            <h3>🎯 Basic Scene</h3>
+            <canvas id="demo1" class="demo-canvas"></canvas>
+            <div class="code-example">
+// Create a basic scene
+const scene = new FOUR.Scene();
+const camera = new FOUR.PerspectiveCamera(75, 2, 0.1, 1000);
+const renderer = new FOUR.WebGLRenderer();
+
+const geometry = new FOUR.BoxGeometry();
+const material = new FOUR.MeshBasicMaterial({color: 0x4A90E2});
+const cube = new FOUR.Mesh(geometry, material);
+scene.add(cube);
+            </div>
+            <button class="btn" onclick="startDemo1()">Start Demo</button>
+        </div>
+
+        <!-- Animated Objects Demo -->
+        <div class="demo-card">
+            <h3>🌀 Animated Objects</h3>
+            <canvas id="demo2" class="demo-canvas"></canvas>
+            <div class="code-example">
+// Add animation
+function animate() {
+    requestAnimationFrame(animate);
+    cube.rotation.x += 0.01;
+    cube.rotation.y += 0.01;
+    renderer.render(scene, camera);
+}
+animate();
+            </div>
+            <button class="btn" onclick="startDemo2()">Start Demo</button>
+        </div>
+
+        <!-- Lighting Demo -->
+        <div class="demo-card">
+            <h3>💡 Advanced Lighting</h3>
+            <canvas id="demo3" class="demo-canvas"></canvas>
+            <div class="code-example">
+// Add realistic lighting
+const ambientLight = new FOUR.AmbientLight(0x404040, 0.6);
+const directionalLight = new FOUR.DirectionalLight(0xffffff, 1);
+directionalLight.castShadow = true;
+
+const material = new FOUR.MeshPhongMaterial({
+    color: 0x4A90E2,
+    shininess: 100
+});
+            </div>
+            <button class="btn" onclick="startDemo3()">Start Demo</button>
+        </div>
+
+        <!-- Interactive Demo -->
+        <div class="demo-card">
+            <h3>🎮 Interactive Controls</h3>
+            <canvas id="demo4" class="demo-canvas"></canvas>
+            <div class="code-example">
+// Add mouse controls
+canvas.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width * 2 - 1;
+    const y = -(event.clientY - rect.top) / rect.height * 2 + 1;
+    
+    object.rotation.y = x * Math.PI;
+    object.rotation.x = y * Math.PI;
+});
+            </div>
+            <button class="btn" onclick="startDemo4()">Start Demo</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as FOUR from './build/four.module.js';
+
+        // Demo 1: Basic Scene
+        window.startDemo1 = function() {
+            const canvas = document.getElementById('demo1');
+            const scene = new FOUR.Scene();
+            const camera = new FOUR.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new FOUR.WebGLRenderer({ canvas, antialias: true });
+            
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            
+            const geometry = new FOUR.BoxGeometry();
+            const material = new FOUR.MeshBasicMaterial({ color: 0x4A90E2 });
+            const cube = new FOUR.Mesh(geometry, material);
+            scene.add(cube);
+            
+            camera.position.z = 5;
+            renderer.render(scene, camera);
+        };
+
+        // Demo 2: Animated Objects
+        window.startDemo2 = function() {
+            const canvas = document.getElementById('demo2');
+            const scene = new FOUR.Scene();
+            const camera = new FOUR.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new FOUR.WebGLRenderer({ canvas, antialias: true });
+            
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            
+            const geometry = new FOUR.BoxGeometry();
+            const material = new FOUR.MeshBasicMaterial({ color: 0x4A90E2 });
+            const cube = new FOUR.Mesh(geometry, material);
+            scene.add(cube);
+            
+            camera.position.z = 5;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        // Demo 3: Advanced Lighting
+        window.startDemo3 = function() {
+            const canvas = document.getElementById('demo3');
+            const scene = new FOUR.Scene();
+            const camera = new FOUR.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new FOUR.WebGLRenderer({ canvas, antialias: true });
+            
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.shadowMap.enabled = true;
+            
+            const ambientLight = new FOUR.AmbientLight(0x404040, 0.6);
+            scene.add(ambientLight);
+            
+            const directionalLight = new FOUR.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(1, 1, 1);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            
+            const geometry = new FOUR.SphereGeometry(1, 32, 32);
+            const material = new FOUR.MeshPhongMaterial({ 
+                color: 0x4A90E2,
+                shininess: 100
+            });
+            const sphere = new FOUR.Mesh(geometry, material);
+            sphere.castShadow = true;
+            scene.add(sphere);
+            
+            camera.position.z = 5;
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                sphere.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        // Demo 4: Interactive Controls
+        window.startDemo4 = function() {
+            const canvas = document.getElementById('demo4');
+            const scene = new FOUR.Scene();
+            const camera = new FOUR.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+            const renderer = new FOUR.WebGLRenderer({ canvas, antialias: true });
+            
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            
+            const geometry = new FOUR.TorusGeometry(1, 0.3, 16, 100);
+            const material = new FOUR.MeshBasicMaterial({ 
+                color: 0x4A90E2,
+                wireframe: true
+            });
+            const torus = new FOUR.Mesh(geometry, material);
+            scene.add(torus);
+            
+            camera.position.z = 5;
+            
+            canvas.addEventListener('mousemove', (event) => {
+                const rect = canvas.getBoundingClientRect();
+                const x = (event.clientX - rect.left) / rect.width * 2 - 1;
+                const y = -(event.clientY - rect.top) / rect.height * 2 + 1;
+                
+                torus.rotation.y = x * Math.PI;
+                torus.rotation.x = y * Math.PI;
+            });
+            
+            function animate() {
+                requestAnimationFrame(animate);
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+
+        // Auto-start first demo
+        setTimeout(() => {
+            startDemo1();
+        }, 500);
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,215 @@
+.DS_Store
+*.swp
+.project
+.idea/
+.vscode/
+npm-debug.log
+.jshintrc
+.vs/
+
+test/unit/build
+test/treeshake/index-src.bundle.min.js
+test/treeshake/index.bundle.js
+test/treeshake/index.bundle.min.js
+test/treeshake/index.webgpu.bundle.js
+test/treeshake/index.webgpu.bundle.min.js
+test/treeshake/index.webgpu.nodes.bundle.js
+test/treeshake/index.webgpu.nodes.bundle.min.js
+test/treeshake/stats.html
+test/e2e/chromium
+test/e2e/output-screenshots
+
+**/node_modules
+**/docs_new
+
+# ===== NODE.JS =====
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage and testing
+coverage/
+*.lcov
+.nyc_output
+.coverage/
+junit.xml
+
+# ===== BUILD & DIST =====
+# Build outputs (keep our pre-built files)
+# build/ - commented out to keep our library builds
+dist/
+lib/
+out/
+.next/
+.nuxt/
+
+# Temporary build files
+.tmp/
+.temp/
+*.tmp
+*.temp
+
+# ===== DEVELOPMENT =====
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Cache directories
+.cache/
+.parcel-cache/
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+.eslintcache
+.stylelintcache
+
+# ===== ENVIRONMENT =====
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# ===== PACKAGE MANAGERS =====
+# NPM
+.npm
+*.tgz
+package-lock.json
+
+# Yarn
+.yarn-integrity
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# PNPM
+.pnpm-store/
+
+# ===== TESTING =====
+# Test results
+test-results/
+playwright-report/
+test-output/
+coverage/
+
+# ===== DOCUMENTATION =====
+# Generated docs (keep manual docs)
+docs/generated/
+api-docs/
+typedoc/
+
+# ===== GRAPHICS & ASSETS =====
+# Large media files (keep essential assets)
+*.psd
+*.ai
+*.sketch
+*.fig
+*.xcf
+
+# Temporary image files
+*.tmp.png
+*.tmp.jpg
+*.tmp.gif
+
+# ===== LOGS =====
+# Application logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== SECURITY =====
+# Certificates and keys
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# ===== PLATFORM SPECIFIC =====
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+
+# ===== MISC =====
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# Database files
+*.sqlite
+*.db
+
+# ===== 4.JS SPECIFIC =====
+# Development builds
+build/dev/
+build/debug/
+
+# Performance profiling
+*.cpuprofile
+*.heapprofile
+
+# WebGL debugging
+webgl-debug/
+
+# Example outputs
+examples/screenshots/
+examples/recordings/
+
+# User-generated content
+user-content/
+uploads/
+
+# ===== KEEP THESE FILES =====
+# Essential 4.js library files
+!build/four.module.js
+!build/four.core.js
+!build/four.webgpu.js
+!build/four.cjs
+!build/four.js
+!files/
+!src/
+!test/
+!utils/ew

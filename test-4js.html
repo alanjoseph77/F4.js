@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>4.js Library Test</title>
+    <style>
+        body { margin: 0; background: #000; font-family: Arial; color: white; }
+        #info { position: absolute; top: 10px; left: 10px; z-index: 100; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h2>4.js Library Test</h2>
+        <div id="status">Loading...</div>
+        <div id="results"></div>
+    </div>
+
+    <script type="module">
+        import * as FOUR from './build/four.module.js';
+        
+        const status = document.getElementById('status');
+        const results = document.getElementById('results');
+        
+        function test(name, fn) {
+            try {
+                fn();
+                results.innerHTML += `✅ ${name}<br>`;
+                return true;
+            } catch (error) {
+                results.innerHTML += `❌ ${name}: ${error.message}<br>`;
+                return false;
+            }
+        }
+        
+        // Test core components
+        let allPassed = true;
+        
+        allPassed &= test('FOUR namespace exists', () => {
+            if (!FOUR) throw new Error('FOUR namespace not found');
+        });
+        
+        allPassed &= test('Scene constructor', () => {
+            const scene = new FOUR.Scene();
+            if (!scene.isScene) throw new Error('Scene not created properly');
+        });
+        
+        allPassed &= test('Camera constructor', () => {
+            const camera = new FOUR.PerspectiveCamera(75, 1, 0.1, 1000);
+            if (!camera.isPerspectiveCamera) throw new Error('Camera not created properly');
+        });
+        
+        allPassed &= test('WebGLRenderer constructor', () => {
+            const renderer = new FOUR.WebGLRenderer();
+            if (!renderer.isWebGLRenderer) throw new Error('Renderer not created properly');
+        });
+        
+        allPassed &= test('Geometry creation', () => {
+            const geometry = new FOUR.BoxGeometry(1, 1, 1);
+            if (!geometry.isBufferGeometry) throw new Error('Geometry not created properly');
+        });
+        
+        allPassed &= test('Material creation', () => {
+            const material = new FOUR.MeshBasicMaterial({ color: 0xff0000 });
+            if (!material.isMaterial) throw new Error('Material not created properly');
+        });
+        
+        allPassed &= test('Mesh creation', () => {
+            const geometry = new FOUR.BoxGeometry();
+            const material = new FOUR.MeshBasicMaterial();
+            const mesh = new FOUR.Mesh(geometry, material);
+            if (!mesh.isMesh) throw new Error('Mesh not created properly');
+        });
+        
+        allPassed &= test('Lighting', () => {
+            const light = new FOUR.DirectionalLight(0xffffff, 1);
+            if (!light.isLight) throw new Error('Light not created properly');
+        });
+        
+        // Test a complete scene
+        allPassed &= test('Complete scene rendering', () => {
+            const scene = new FOUR.Scene();
+            const camera = new FOUR.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new FOUR.WebGLRenderer();
+            
+            const geometry = new FOUR.BoxGeometry();
+            const material = new FOUR.MeshBasicMaterial({ color: 0x00ff00 });
+            const cube = new FOUR.Mesh(geometry, material);
+            
+            scene.add(cube);
+            camera.position.z = 5;
+            
+            renderer.setSize(400, 300);
+            document.body.appendChild(renderer.domElement);
+            renderer.render(scene, camera);
+            
+            if (!renderer.domElement) throw new Error('Renderer canvas not created');
+        });
+        
+        status.textContent = allPassed ? 'All tests passed! 4.js library is working properly.' : 'Some tests failed. Check results above.';
+        status.style.color = allPassed ? '#4CAF50' : '#F44336';
+    </script>
+</body>
+</html>
+
+
+

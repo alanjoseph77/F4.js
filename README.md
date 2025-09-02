@@ -213,7 +213,7 @@ git clone --depth=1 https://github.com/alan-alisha/4js.git
 [discord]: https://img.shields.io/discord/685241246557667386
 [discord-url]: https://discord.gg/4js
 [deepwiki]: https://deepwiki.com/badge.svg
-[deepwiki-url]: https://deepwiki.com/alan-alisha/4js
+[deepwiki-url]: [https://deepwiki.com/alan-alisha/4js](https://github.com/alanjoseph77/F4.js.git)
 
 
 
